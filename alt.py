@@ -12,13 +12,18 @@ import os, json, string, random, datetime, names, time, requests, keyboard
 os.system("cls || clear")
 
 def get_ip_address():
-    response = requests.get('https://ipinfo.io/json')
-    ip_data = response.json()
-    return ip_data['ip']
+    try:
+        response = requests.get('https://ipinfo.io/json')
+        ip_data = response.json()
+        return ip_data['ip']
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to get IP address: {e}")
+        return None
 
 def logo():
     """logo"""
     print("MSAC")
+
 logo()
 
 def choose_country():
@@ -113,7 +118,13 @@ def create_accounts(country_code):
     positions = [0, 640, 1280]
     create_multiple_accounts(positions)
 
-    ip_address = get_ip_address()
+    ip_address = None
+    while ip_address is None:
+        ip_address = get_ip_address()
+        if ip_address is None:
+            print("Retrying to get IP address...")
+            time.sleep(1)
+
     print(f"Current IP address: {ip_address}")
 
     while True:
