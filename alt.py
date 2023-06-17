@@ -111,6 +111,7 @@ def create_accounts(country_code):
                 print(f"Failed to check if window was closed: {email}")
 
             driver.quit()
+            driver.close() 
 
     def create_multiple_accounts(positions):
         threads = []
