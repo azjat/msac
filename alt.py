@@ -20,10 +20,21 @@ def get_ip_address():
     except requests.exceptions.RequestException as e:
         print("Failed to get IP address. Please check your internet connection.")
         return None
-
+window_errors_check = True
 def logo():
     """logo"""
-    print("MSAC")
+    print(r"""
+      ___           ___           ___           ___     
+     /__/\         /  /\         /  /\         /  /\    
+    |  |::\       /  /:/_       /  /::\       /  /:/    
+    |  |:|:\     /  /:/ /\     /  /:/\:\     /  /:/     
+  __|__|:|\:\   /  /:/ /::\   /  /:/~/::\   /  /:/  ___ 
+ /__/::::| \:\ /__/:/ /:/\:\ /__/:/ /:/\:\ /__/:/  /  /\
+ \  \:\~~\__\/ \  \:\/:/~/:/ \  \:\/:/__\/ \  \:\ /  /:/
+  \  \:\        \  \::/ /:/   \  \::/       \  \:\  /:/ 
+   \  \:\        \__\/ /:/     \  \:\        \  \:\/:/  
+    \  \:\         /__/:/       \  \:\        \  \::/   
+     \__\/         \__\/         \__\/         \__\/       """)
 
 logo()
 
@@ -99,8 +110,10 @@ def create_accounts(country_code):
                 with open("accounts.txt", "a") as f:
                     f.write(f"{email}:{password}\n")
                 print(f"Created | {email}")
+                driver.quit()
+                window_errors_check = False
 
-                while True:
+                while window_errors_check == True:
                     if len(driver.window_handles) == 0:
                         print(f"Window closed manually: {email}")
                         break
@@ -109,8 +122,7 @@ def create_accounts(country_code):
                 print(f"Window closed: {email}")
             except WebDriverException:
                 print(f"Failed to check if window was closed: {email}")
-
-            driver.quit()
+   
 
     def create_multiple_accounts(positions):
         threads = []
@@ -141,6 +153,7 @@ def create_accounts(country_code):
             print("IP address changed. Creating new accounts...")
             create_multiple_accounts(positions)
             ip_address = new_ip_address
+            window_errors_check = True
 
 country_code = choose_country()
 create_accounts(country_code)
