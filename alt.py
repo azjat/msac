@@ -42,9 +42,10 @@ def choose_country():
     print("Please choose a country:")
     print("1. Poland")
     print("2. USA")
+    print("3. Other")
 
     selection = input("Enter the number corresponding to your country choice: ")
-    while selection not in ["1", "2"]:
+    while selection not in ["1", "2", "3"]:
         print("Invalid selection. Please try again.")
         selection = input("Enter the number corresponding to your country choice: ")
 
@@ -52,6 +53,12 @@ def choose_country():
         return "PL"
     elif selection == "2":
         return "US"
+    elif selection == "3":
+        custom_code = input("Enter your custom country code (2 letters): ")
+        while not custom_code.isalpha() or len(custom_code) != 2:
+            print("Invalid country code. Please enter 2 letters.")
+            custom_code = input("Enter your custom country code (2 letters): ")
+        return custom_code.upper()
 
 def create_accounts(country_code):
     try:
