@@ -1,4 +1,4 @@
-# Microsoft-Account-Creator
+# MSAC
 
 A Microsoft account creator made in Python using Selenium.
 
@@ -9,4 +9,4 @@ Install required packages:
 
 ## Usage
 
-`py main.py`
+`python3 alt.py`
