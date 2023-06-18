@@ -20,7 +20,9 @@ def get_ip_address():
     except requests.exceptions.RequestException as e:
         print("Failed to get IP address. Please check your internet connection.")
         return None
+       
 window_errors_check = True
+ 
 def logo():
     """logo"""
     print(r"""
@@ -87,12 +89,14 @@ def create_accounts(country_code):
             wait = WebDriverWait(driver, 30)
 
             try:
+
                 driver.get(cfg_signup_link)
                 first_name = names.get_first_name()
                 surname = names.get_last_name()
                 email = f"{first_name.lower()}{surname.lower()}{str(random.randint(1, 9999))}@outlook.com"
                 password = ''.join(random.sample(string.ascii_letters, 8))
                 print(f"Started: {email}")
+
                 wait.until(EC.visibility_of_element_located((By.ID, "MemberName"))).send_keys(email)
                 wait.until(EC.visibility_of_element_located((By.ID, "iSignupAction"))).click()
                 wait.until(EC.visibility_of_element_located((By.ID, "PasswordInput"))).send_keys(password)
@@ -102,6 +106,7 @@ def create_accounts(country_code):
                 wait.until(EC.visibility_of_element_located((By.ID, "LastName"))).send_keys(surname)
                 wait.until(EC.visibility_of_element_located((By.ID, "iSignupAction"))).click()
                 wait.until(EC.visibility_of_element_located((By.ID, "BirthDateCountryAccrualInputPane")))
+
                 Select(driver.find_element(By.ID, "Country")).select_by_value(country_code)
                 birth_month = str(random.randint(1, 12))
                 Select(driver.find_element(By.ID, "BirthMonth")).select_by_value(birth_month)
@@ -112,8 +117,26 @@ def create_accounts(country_code):
                 driver.find_element(By.ID, "BirthYear").send_keys(birth_year)
                 wait.until(EC.visibility_of_element_located((By.ID, "iSignupAction"))).click()
                 wait.until(EC.visibility_of_element_located((By.ID, "enforcementFrame"))).click()
-                print(f"Captcha: {email}")                
-                WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container" or "idSIButton9" or "id__0")))
+
+                print(f"Captcha: {email}")    
+                
+                element1 = None
+                element2 = None
+                wait1 = WebDriverWait(driver, 30)
+                while not element1 or not element2:
+                    try:
+                        element1 = wait.until(EC.presence_of_element_located((By.ID, "idSIButton9")))
+                        element1.click()
+                    except:
+                        pass
+                    try:
+                        element2 = wait.until(EC.presence_of_element_located((By.ID, "id__0")))
+                        element2.click()
+                    except:
+                        pass
+
+                WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container")))
+
                 with open("accounts.txt", "a") as f:
                     f.write(f"{email}:{password}\n")
                 print(f"Created: {email}")
