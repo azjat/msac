@@ -200,19 +200,25 @@ def create_accounts(country_code):
 
                 print(f"Captcha: {email}")    
                 
-                element1 = None
-                element2 = None
-                while not element1 or not element2:
-                    try:
-                        element1 = wait.until(EC.presence_of_element_located((By.ID, "idSIButton9")))
-                        element1.click()
-                    except:
-                        pass
-                    try:
-                        element2 = wait.until(EC.presence_of_element_located((By.ID, "id__0")))
-                        element2.click()
-                    except:
-                        pass
+                # messy fix but working one XD
+                clicked_e1 = False
+                clicked_e2 = False
+                while not clicked_e1 or not clicked_e2:
+                    if not clicked_e1:
+                        try:
+                            element1 = WebDriverWait(driver, 0.25).until(EC.presence_of_element_located((By.ID, "idSIButton9")))
+                            element1.click()
+                            clicked_e1 = True
+                        except:
+                            pass
+
+                    if not clicked_e2:
+                        try:
+                            element2 = WebDriverWait(driver, 0.25).until(EC.presence_of_element_located((By.ID, "id__0")))
+                            element2.click()
+                            clicked_e2 = True
+                        except:
+                            pass
 
                 WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container")))
 
@@ -239,6 +245,7 @@ def create_accounts(country_code):
             thread = CreatorThread(positions[i])
             thread.start()
             threads.append(thread)
+            time.sleep(0.33)
 
         for thread in threads:
             thread.join()
