@@ -157,10 +157,11 @@ def create_accounts(country_code):
         time.sleep(1)
         new_ip_address = get_ip_address()
         if new_ip_address != ip_address:
-            print("IP address changed. Creating new accounts...")
-            create_multiple_accounts(positions)
-            ip_address = new_ip_address
-            window_errors_check = True
+            if new_ip_address != None:
+                print("IP address changed. Creating new accounts...")
+                create_multiple_accounts(positions)
+                ip_address = new_ip_address
+                window_errors_check = True
 
 country_code = choose_country()
 create_accounts(country_code)
