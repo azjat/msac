@@ -92,7 +92,7 @@ def create_accounts(country_code):
                 surname = names.get_last_name()
                 email = f"{first_name.lower()}{surname.lower()}{str(random.randint(1, 9999))}@outlook.com"
                 password = ''.join(random.sample(string.ascii_letters, 8))
-                print(f"Started | {email}")
+                print(f"Started: {email}")
                 wait.until(EC.visibility_of_element_located((By.ID, "MemberName"))).send_keys(email)
                 wait.until(EC.visibility_of_element_located((By.ID, "iSignupAction"))).click()
                 wait.until(EC.visibility_of_element_located((By.ID, "PasswordInput"))).send_keys(password)
@@ -112,11 +112,11 @@ def create_accounts(country_code):
                 driver.find_element(By.ID, "BirthYear").send_keys(birth_year)
                 wait.until(EC.visibility_of_element_located((By.ID, "iSignupAction"))).click()
                 wait.until(EC.visibility_of_element_located((By.ID, "enforcementFrame"))).click()
-                print(f"Captcha | {email}")                
+                print(f"Captcha: {email}")                
                 WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container" or "idSIButton9" or "id__0" or "idBtn_Back")))
                 with open("accounts.txt", "a") as f:
                     f.write(f"{email}:{password}\n")
-                print(f"Created | {email}")
+                print(f"Created: {email}")
                 driver.quit()
                 window_errors_check = False
 
