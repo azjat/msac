@@ -25,28 +25,18 @@ def create_accounts(config):
         for thread in threads:
             thread.join()
 
+    old_ips = []
+
     # TODO: make this positions dynamic
     positions = [0, 640, 1280]
-    create_multiple_accounts(positions)
-
-    # TODO: cleanup this mess
-    ip_address = None
-    while ip_address is None:
-        ip_address = utils.get_ip_address()
-        if ip_address is None:
-            print("Retrying to get IP address...")
-            time.sleep(1)
-
-    print(f"Current IP address: {ip_address}")
 
     while True:
-        time.sleep(1)
-        new_ip_address = utils.get_ip_address()
-        if new_ip_address != ip_address:
-            if new_ip_address != None:
-                print("IP address changed. Creating new accounts...")
-                create_multiple_accounts(positions)
-                ip_address = new_ip_address
+        print("Waiting for IP address to change...")
+        current_ip = utils.wait_until_ip_changes(old_ips)
+        old_ips.append(current_ip)
+
+        print(f"Current IP address: {current_ip}")
+        create_multiple_accounts(positions)
 
 if __name__ == "__main__":
     main()

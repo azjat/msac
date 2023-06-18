@@ -1,6 +1,6 @@
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-import requests, json, os, sys
+import requests, json, os, sys, time
 
 def logo():
     print(r"""
@@ -18,12 +18,19 @@ def logo():
 
 def get_ip_address():
     try:
-        response = requests.get('https://ipinfo.io/json')
-        ip_data = response.json()
-        return ip_data['ip']
+        response = requests.get('https://ip.me', timeout=5)
+        return response.text
     except:
         print("Failed to get IP address. Please check your internet connection.")
         return None
+
+def wait_until_ip_changes(old_ips):
+    while True:
+        time.sleep(1)
+        new_ip = get_ip_address()
+
+        if new_ip not in old_ips and new_ip != None:
+            return new_ip
 
 def update_config(config):
     try:

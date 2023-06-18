@@ -100,7 +100,8 @@ class CreatorThread(threading.Thread):
                     except:
                         pass
 
-            WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container")))
+            # IS THIS REQUIRED?
+            #WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container")))
 
             with open("accounts.txt", "a") as f:
                 f.write(f"{email}:{password}\n")
