@@ -1,5 +1,6 @@
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.remote.command import Command
 import requests, json, os, sys, time
 
 def logo():
@@ -103,3 +104,10 @@ def install_webdriver(config):
     else:
         print("Invalid webdriver. Please check your config.json file.")
         sys.exit()
+
+def get_status(driver):
+    try:
+        driver.current_url
+        return True
+    except:
+        return False

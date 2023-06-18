@@ -10,7 +10,7 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 import undetected_chromedriver as uc
-import string, random, datetime, names, time
+import string, random, datetime, names, time, utils, sys
 
 SIGNUP_URL = "https://signup.live.com/signup"
 
@@ -130,3 +130,13 @@ class CreatorThread(threading.Thread):
                     break
             except:
                 pass
+
+            if not utils.get_status(driver):
+                try:
+                    driver.quit()
+                except:
+                    pass
+
+                print(f"Window closed {email}")
+                sys.exit()
+
