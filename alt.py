@@ -11,7 +11,7 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 import undetected_chromedriver as uc
-import os, json, string, random, datetime, names, time, requests, keyboard
+import os, json, string, random, datetime, names, time, requests
 
 os.system("cls || clear")
 
