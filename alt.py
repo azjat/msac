@@ -176,6 +176,7 @@ def create_accounts(country_code):
             email = "Unknown"
 
             try:
+                window_errors_check = True
                 driver.get(cfg_signup_link)
                 first_name = names.get_first_name()
                 surname = names.get_last_name()
