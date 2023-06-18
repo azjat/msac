@@ -192,7 +192,6 @@ def create_accounts(country_code):
                 wait.until(EC.visibility_of_element_located((By.ID, "LastName"))).send_keys(surname)
                 wait.until(EC.visibility_of_element_located((By.ID, "iSignupAction"))).click()
                 wait.until(EC.visibility_of_element_located((By.ID, "BirthDateCountryAccrualInputPane")))
-
                 Select(driver.find_element(By.ID, "Country")).select_by_value(country_code)
                 birth_month = str(random.randint(1, 12))
                 Select(driver.find_element(By.ID, "BirthMonth")).select_by_value(birth_month)
@@ -276,5 +275,5 @@ def create_accounts(country_code):
                 create_multiple_accounts(positions)
                 ip_address = new_ip_address
                 
-country_code=str(config["country_code"]).lower()
+country_code = config["country_code"]
 create_accounts(country_code)
