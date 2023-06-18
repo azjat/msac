@@ -148,17 +148,23 @@ def create_accounts(country_code):
 
             if "chrome" in cfg_webdriver:
                 options = webdriver.ChromeOptions()
+                options.add_argument("--incognito")
                 options.add_experimental_option("excludeSwitches", ["enable-logging"])
+
                 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
                 driver.set_window_size(640, 1080)
                 driver.set_window_position(self.position_x, 0)
             elif "uc" in cfg_webdriver:
                 options = webdriver.ChromeOptions()
+                options.add_argument("--incognito")
+
                 driver = uc.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
                 driver.set_window_size(640, 1080)
                 driver.set_window_position(self.position_x, 0)
             elif "firefox" in cfg_webdriver:
                 options = webdriver.FirefoxOptions()
+                options.add_argument("--private")
+
                 driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
                 driver.set_window_size(640, 1080)
                 driver.set_window_position(self.position_x, 0)
