@@ -130,3 +130,4 @@ dmypy.json
 
 accounts.txt
 config.json
+*.json
