@@ -206,16 +206,14 @@ def create_accounts(country_code):
                 while not clicked_e1 or not clicked_e2:
                     if not clicked_e1:
                         try:
-                            element1 = WebDriverWait(driver, 0.25).until(EC.presence_of_element_located((By.ID, "idSIButton9")))
-                            element1.click()
+                            driver.find_element(By.ID, "idSIButton9").click()
                             clicked_e1 = True
                         except:
                             pass
 
                     if not clicked_e2:
                         try:
-                            element2 = WebDriverWait(driver, 0.25).until(EC.presence_of_element_located((By.ID, "id__0")))
-                            element2.click()
+                            driver.find_element(By.ID, "id__0").click()
                             clicked_e2 = True
                         except:
                             pass
