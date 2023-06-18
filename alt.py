@@ -23,8 +23,6 @@ def get_ip_address():
     except requests.exceptions.RequestException as e:
         print("Failed to get IP address. Please check your internet connection.")
         return None
-       
-window_errors_check = True
 
 def choose_webdriver():
     print("Please choose a webdriver:")
