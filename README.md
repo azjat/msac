@@ -8,7 +8,7 @@ Install required packages:
 `pip install -r requirements.txt`
 
 ## Usage
-`python3 alt.py`
+`python3 main.py`
 
 ## Config
 If you want you can set different webdriver: 
