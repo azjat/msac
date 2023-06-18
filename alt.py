@@ -25,7 +25,51 @@ def get_ip_address():
         return None
        
 window_errors_check = True
- 
+
+def choose_webdriver():
+    print("Please choose a webdriver:")
+    print("1. Chrome")
+    print("2. Firefox")
+    print("3. Undetected Chromedriver (UC)")
+
+    selection = input("Enter the number corresponding to your webdriver choice: ")
+    while selection not in ["1", "2", "3"]:
+        print("Invalid selection. Please try again.")
+        selection = input("Enter the number corresponding to your webdriver choice: ")
+
+    if selection == "1":
+        return "chrome"
+    elif selection == "2":
+        return "firefox"
+    elif selection == "3":
+        return "uc"
+
+def update_config(webdriver):
+    try:
+        with open("config.json", "r") as f:
+            config = json.load(f)
+            config["webdriver"] = webdriver
+
+        with open("config.json", "w") as f:
+            json.dump(config, f, indent=4)
+            print("Config file updated successfully.")
+
+    except Exception as e:
+        print(f"Failed to update config file: {e}")
+
+def load_config():
+    try:
+        with open("config.json", "r") as f:
+            config = json.load(f)
+            return config
+
+    except FileNotFoundError:
+        print("Config file not found.")
+    except json.JSONDecodeError:
+        print("Invalid config file format.")
+    
+    return None
+
 def logo():
     """logo"""
     print(r"""
@@ -42,6 +86,17 @@ def logo():
      \__\/         \__\/         \__\/         \__\/       """)
 
 logo()
+
+config = load_config()
+if config is not None:
+    # Check if 'webdriver' field is empty
+    if not config.get("webdriver"):
+        chosen_webdriver = choose_webdriver()
+        update_config(chosen_webdriver)
+    else:
+        print("Webdriver already specified in the config file.")
+else:
+    print("Unable to proceed without a valid config file.")
 
 def choose_country():
     print("Please choose a country:")
