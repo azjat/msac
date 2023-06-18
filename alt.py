@@ -174,9 +174,9 @@ def create_accounts(country_code):
                 first_name = names.get_first_name()
                 surname = names.get_last_name()
                 email = f"{first_name.lower()}{surname.lower()}{str(random.randint(1, 9999))}@outlook.com"
-                password = ''.join(random.sample(string.ascii_letters, 8))
-                print(f"Started: {email}")
+                password = ''.join(random.choice(string.ascii_letters + string.digits + string.punctuation) for _ in range(12))
 
+                print(f"Started: {email}")
                 wait.until(EC.visibility_of_element_located((By.ID, "MemberName"))).send_keys(email)
                 wait.until(EC.visibility_of_element_located((By.ID, "iSignupAction"))).click()
                 wait.until(EC.visibility_of_element_located((By.ID, "PasswordInput"))).send_keys(password)
