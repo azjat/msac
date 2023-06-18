@@ -113,7 +113,7 @@ def create_accounts(country_code):
                 wait.until(EC.visibility_of_element_located((By.ID, "iSignupAction"))).click()
                 wait.until(EC.visibility_of_element_located((By.ID, "enforcementFrame"))).click()
                 print(f"Captcha: {email}")                
-                WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container" or "idSIButton9" or "id__0" or "idBtn_Back")))
+                WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container" or "idSIButton9" or "id__0")))
                 with open("accounts.txt", "a") as f:
                     f.write(f"{email}:{password}\n")
                 print(f"Created: {email}")
