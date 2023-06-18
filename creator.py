@@ -82,23 +82,7 @@ class CreatorThread(threading.Thread):
             wait.until(EC.visibility_of_element_located((By.ID, "enforcementFrame"))).click()
 
             print(f"Captcha: {email}")    
-            
-            clicked_e1 = False
-            clicked_e2 = False
-            while not clicked_e1 or not clicked_e2:
-                if not clicked_e1:
-                    try:
-                        driver.find_element(By.ID, "idSIButton9").click()
-                        clicked_e1 = True
-                    except:
-                        pass
-
-                if not clicked_e2:
-                    try:
-                        driver.find_element(By.ID, "id__0").click()
-                        clicked_e2 = True
-                    except:
-                        pass
+            self.wait_for_captcha(driver, email)
 
             # IS THIS REQUIRED?
             #WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container")))
@@ -120,3 +104,29 @@ class CreatorThread(threading.Thread):
             print(f"Failed to check if window was closed: {email}")
         except AttributeError:
             print(f"Error: The window is no longer available: {email}")
+
+    def wait_for_captcha(self, driver, email):
+        clicked_e1 = False
+        clicked_e2 = False
+        while not clicked_e1 or not clicked_e2:
+            if not clicked_e1:
+                try:
+                    driver.find_element(By.ID, "idSIButton9").click()
+                    clicked_e1 = True
+                except:
+                    pass
+
+            if not clicked_e2:
+                try:
+                    driver.find_element(By.ID, "id__0").click()
+                    clicked_e2 = True
+                except:
+                    pass
+
+            try:
+                mc_elem = driver.find_element(By.ID, "microsoft_container")
+                if mc_elem:
+                    print(f"Skipping loop {email}")
+                    break
+            except:
+                pass

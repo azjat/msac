@@ -25,7 +25,7 @@ def create_accounts(config):
         for thread in threads:
             thread.join()
 
-    old_ips = []
+    old_ips = [utils.get_ip_address()]
 
     # TODO: make this positions dynamic
     positions = [0, 640, 1280]
