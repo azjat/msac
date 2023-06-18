@@ -1,13 +1,16 @@
 import threading
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException, WebDriverException
+from selenium.webdriver.chrome import service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
+import undetected_chromedriver as uc
 import os, json, string, random, datetime, names, time, requests, keyboard
 
 os.system("cls || clear")
@@ -68,6 +71,15 @@ def create_accounts(country_code):
             config = json.load(f)
         cfg_signup_link = str(config["signup_link"])
         cfg_webdriver = str(config["webdriver"]).lower()
+
+        if cfg_webdriver == "chrome" or cfg_webdriver == "uc":
+            ChromeDriverManager().install()
+        elif cfg_webdriver == "firefox":
+            GeckoDriverManager().install()
+        else:
+            print("Invalid webdriver. Please check your config.json file.")
+            return
+
     except Exception as e:
         print(f"Failed to load config: {e}")
 
@@ -82,14 +94,27 @@ def create_accounts(country_code):
             if "chrome" in cfg_webdriver:
                 options = webdriver.ChromeOptions()
                 options.add_experimental_option("excludeSwitches", ["enable-logging"])
-                driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+                driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
                 driver.set_window_size(640, 1080)
                 driver.set_window_position(self.position_x, 0)
+            elif "uc" in cfg_webdriver:
+                options = webdriver.ChromeOptions()
+                driver = uc.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+                driver.set_window_size(640, 1080)
+                driver.set_window_position(self.position_x, 0)
+            elif "firefox" in cfg_webdriver:
+                options = webdriver.FirefoxOptions()
+                driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
+                driver.set_window_size(640, 1080)
+                driver.set_window_position(self.position_x, 0)
+            else:
+                print("Invalid webdriver. Please check your config.json file.")
+                return
 
             wait = WebDriverWait(driver, 30)
+            email = "Unknown"
 
             try:
-
                 driver.get(cfg_signup_link)
                 first_name = names.get_first_name()
                 surname = names.get_last_name()
@@ -122,7 +147,6 @@ def create_accounts(country_code):
                 
                 element1 = None
                 element2 = None
-                wait1 = WebDriverWait(driver, 30)
                 while not element1 or not element2:
                     try:
                         element1 = wait.until(EC.presence_of_element_located((By.ID, "idSIButton9")))
@@ -184,7 +208,6 @@ def create_accounts(country_code):
                 print("IP address changed. Creating new accounts...")
                 create_multiple_accounts(positions)
                 ip_address = new_ip_address
-                window_errors_check = True
 
 country_code = choose_country()
 create_accounts(country_code)

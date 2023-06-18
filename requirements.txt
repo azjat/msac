@@ -1,5 +1,6 @@
-selenium
+selenium==4.9.1
 webdriver-manager
 names
 keyboard
 requests
+undetected-chromedriver
