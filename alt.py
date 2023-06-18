@@ -43,61 +43,7 @@ def choose_webdriver():
         return "firefox"
     elif selection == "3":
         return "uc"
-
-def update_config(webdriver):
-    try:
-        with open("config.json", "r") as f:
-            config = json.load(f)
-            config["webdriver"] = webdriver
-
-        with open("config.json", "w") as f:
-            json.dump(config, f, indent=4)
-            print("Config file updated successfully.")
-
-    except Exception as e:
-        print(f"Failed to update config file: {e}")
-
-def load_config():
-    try:
-        with open("config.json", "r") as f:
-            config = json.load(f)
-            return config
-
-    except FileNotFoundError:
-        print("Config file not found.")
-    except json.JSONDecodeError:
-        print("Invalid config file format.")
     
-    return None
-
-def logo():
-    """logo"""
-    print(r"""
-      ___           ___           ___           ___     
-     /__/\         /  /\         /  /\         /  /\    
-    |  |::\       /  /:/_       /  /::\       /  /:/    
-    |  |:|:\     /  /:/ /\     /  /:/\:\     /  /:/     
-  __|__|:|\:\   /  /:/ /::\   /  /:/~/::\   /  /:/  ___ 
- /__/::::| \:\ /__/:/ /:/\:\ /__/:/ /:/\:\ /__/:/  /  /\
- \  \:\~~\__\/ \  \:\/:/~/:/ \  \:\/:/__\/ \  \:\ /  /:/
-  \  \:\        \  \::/ /:/   \  \::/       \  \:\  /:/ 
-   \  \:\        \__\/ /:/     \  \:\        \  \:\/:/  
-    \  \:\         /__/:/       \  \:\        \  \::/   
-     \__\/         \__\/         \__\/         \__\/       """)
-
-logo()
-
-config = load_config()
-if config is not None:
-    # Check if 'webdriver' field is empty
-    if not config.get("webdriver"):
-        chosen_webdriver = choose_webdriver()
-        update_config(chosen_webdriver)
-    else:
-        print("Webdriver already specified in the config file.")
-else:
-    print("Unable to proceed without a valid config file.")
-
 def choose_country():
     print("Please choose a country:")
     print("1. Poland")
@@ -120,11 +66,65 @@ def choose_country():
             custom_code = input("Enter your custom country code (2 letters): ")
         return custom_code.upper()
 
+def update_config(webdriver, country_code):
+    config = {
+        "webdriver": webdriver,
+        "country_code": country_code
+    }
+
+    try:
+        with open("config.json", "w") as f:
+            json.dump(config, f, indent=4)
+            print("Config file updated successfully.")
+
+    except Exception as e:
+        print(f"Failed to update config file: {e}")
+
+def load_config():
+    try:
+        with open("config.json", "r") as f:
+            config = json.load(f)
+            return config
+
+    except FileNotFoundError:
+        print("Config file not found.")
+    except json.JSONDecodeError:
+        print("Invalid config file format.")
+    return None
+    
+def logo():
+    """logo"""
+    print(r"""
+      ___           ___           ___           ___     
+     /__/\         /  /\         /  /\         /  /\    
+    |  |::\       /  /:/_       /  /::\       /  /:/    
+    |  |:|:\     /  /:/ /\     /  /:/\:\     /  /:/     
+  __|__|:|\:\   /  /:/ /::\   /  /:/~/::\   /  /:/  ___ 
+ /__/::::| \:\ /__/:/ /:/\:\ /__/:/ /:/\:\ /__/:/  /  /\
+ \  \:\~~\__\/ \  \:\/:/~/:/ \  \:\/:/__\/ \  \:\ /  /:/
+  \  \:\        \  \::/ /:/   \  \::/       \  \:\  /:/ 
+   \  \:\        \__\/ /:/     \  \:\        \  \:\/:/  
+    \  \:\         /__/:/       \  \:\        \  \::/   
+     \__\/         \__\/         \__\/         \__\/       """)
+
+logo()
+
+if not os.path.isfile("config.json"):
+    cfg_webdriver = choose_webdriver()
+    country_code = choose_country()
+    update_config(cfg_webdriver, country_code)
+
+config=load_config()
+if config is not None:
+    print("Loaded config:")
+    print(f"Webdriver: {str(config['webdriver'])}")
+    print(f"Country: {str(config['country_code'])}")
+
 def create_accounts(country_code):
     try:
         with open("config.json") as f:
             config = json.load(f)
-        cfg_signup_link = str(config["signup_link"])
+        cfg_signup_link = "https://signup.live.com/signup"
         cfg_webdriver = str(config["webdriver"]).lower()
 
         if cfg_webdriver == "chrome" or cfg_webdriver == "uc":
@@ -206,7 +206,6 @@ def create_accounts(country_code):
 
                 print(f"Captcha: {email}")    
                 
-                # messy fix but working one XD
                 clicked_e1 = False
                 clicked_e2 = False
                 while not clicked_e1 or not clicked_e2:
@@ -241,6 +240,8 @@ def create_accounts(country_code):
                 print(f"Window closed: {email}")
             except WebDriverException:
                 print(f"Failed to check if window was closed: {email}")
+            except AttributeError:
+                print(f"Error: The window is no longer available: {email}")
    
 
     def create_multiple_accounts(positions):
@@ -274,6 +275,6 @@ def create_accounts(country_code):
                 print("IP address changed. Creating new accounts...")
                 create_multiple_accounts(positions)
                 ip_address = new_ip_address
-
-country_code = choose_country()
+                
+country_code=str(config["country_code"]).lower()
 create_accounts(country_code)
