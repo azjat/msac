@@ -84,9 +84,6 @@ class CreatorThread(threading.Thread):
             print(f"Captcha: {email}")    
             self.wait_for_captcha(driver, email)
 
-            # IS THIS REQUIRED?
-            #WebDriverWait(driver, 20000).until(EC.visibility_of_element_located((By.ID, "microsoft_container")))
-
             with open("accounts.txt", "a") as f:
                 f.write(f"{email}:{password}\n")
             print(f"Created: {email}")
@@ -122,7 +119,13 @@ class CreatorThread(threading.Thread):
                     clicked_e2 = True
                 except:
                     pass
-
+            try:
+                driver.find_element(By.ID, "wlspispHipControlButtonsContainer")
+                print(f"Number verification detected. Closing window: {email}")
+                driver.quit()
+                sys.exit()
+            except:
+                pass
             try:
                 mc_elem = driver.find_element(By.ID, "microsoft_container")
                 if mc_elem:
