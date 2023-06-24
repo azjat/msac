@@ -3,3 +3,4 @@ webdriver-manager
 names
 requests
 undetected-chromedriver
+screeninfo

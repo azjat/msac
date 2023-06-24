@@ -1,5 +1,4 @@
 import threading
-import ctypes
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException, WebDriverException
 from selenium.webdriver.common.by import By
@@ -15,15 +14,12 @@ import string, random, datetime, names, time, utils, sys
 
 SIGNUP_URL = "https://signup.live.com/signup"
 
-user32 = ctypes.windll.user32
-screen_width = user32.GetSystemMetrics(0)
-screen_height = user32.GetSystemMetrics(1)
-window_width = screen_width // 3
-
 class CreatorThread(threading.Thread):
-    def __init__(self, position_x, config):
+    def __init__(self, position_x, window_w, window_h, config):
         super().__init__()
         self.position_x = position_x
+        self.window_w = window_w
+        self.window_h = window_h
         self.config = config
 
     def run(self):
@@ -35,21 +31,21 @@ class CreatorThread(threading.Thread):
             options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
             driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-            driver.set_window_size(window_width, screen_height)
+            driver.set_window_size(self.window_w, self.window_h)
             driver.set_window_position(self.position_x, 0)
         elif "uc" in self.config["webdriver"]:
             options = webdriver.ChromeOptions()
             options.add_argument("--incognito")
 
             driver = uc.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-            driver.set_window_size(window_width, screen_height)
+            driver.set_window_size(self.window_w, self.window_h)
             driver.set_window_position(self.position_x, 0)
         elif "firefox" in self.config["webdriver"]:
             options = webdriver.FirefoxOptions()
             options.add_argument("--private")
 
             driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
-            driver.set_window_size(window_width, screen_height)
+            driver.set_window_size(self.window_w, self.window_h)
             driver.set_window_position(self.position_x, 0)
         else:
             print("Invalid webdriver. Please check your config.json file.")

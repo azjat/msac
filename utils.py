@@ -1,6 +1,7 @@
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.remote.command import Command
+from screeninfo import get_monitors
 import requests, json, os, sys, time
 
 def logo():
@@ -111,3 +112,8 @@ def get_status(driver):
         return True
     except:
         return False
+
+def get_primary_display():
+    for m in get_monitors():
+        if m.is_primary:
+            return m
