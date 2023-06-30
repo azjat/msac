@@ -1,4 +1,4 @@
-import os, time, creator, utils
+import os, time, creator, utils, sys
 
 def main():
     os.system("cls || clear")
@@ -31,6 +31,9 @@ def create_accounts(config):
             thread.join()
 
     old_ips = [utils.get_ip_address()]
+    if len(sys.argv) > 1 and sys.argv[1] == "-n":
+        print("Removing current IP address from list of old IPs...")
+        old_ips = []
 
     start_x = primary_display.x
     step_x = primary_display.width // 3
