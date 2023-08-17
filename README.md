@@ -11,7 +11,9 @@ Install required packages:
 `python3 main.py`
 
 ## Config
-If you want you can set different webdriver: 
+You gonna get an option to choose the webdriver and country code the first time you run the creator. 
+
+If you want to you can set a different webdriver later: 
  - `chrome` - normal chrome webdriver
  - `firefox` - normal gecko webdriver
  - `uc` - undetected chromedriver (requires selenium < 4.10)
